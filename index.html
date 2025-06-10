@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <title>proyecto</title>
+   <style>
+    /* Centramos todo el contenido */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+      background-color: #eef2f7;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+     button {
+       padding: 10px 20px;
+       font-size: 16px;
+    }
+   </style>
+</head>
+<body>
+   <h1 id="titulo">Haz clic para un texto aleatorio</h1>
+  <button onclick="mostrarTextoAleatorio()">Sorpresa</button>
+  
+   <script>
+    const textos = [
+      "¡Hola, Negros!",
+      "Nos toca josesin.",
+      "Saquen las papas.",
+      "nos estan viendo raro we!.",
+      "No quiero.",
+      "Si lees esto es por que un wey de 3ser grado tenia hueva y hizo esta mamada.",
+      "Duermete.",
+      "hay pa las de 1500?.",
+      "YA CALLO LA BECA!!!!!.",
+      "Eres Wapo.",
+      "Nomas hay 11 textos randoms, contando este, espera actualizaciones."
+    ];
+
+    function mostrarTextoAleatorio() {
+      const indice = Math.floor(Math.random() * textos.length);
+      document.getElementById("titulo").textContent = textos[indice];
+    }
+   </script>
+</body>
+</html>
