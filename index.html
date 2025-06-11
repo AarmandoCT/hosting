@@ -5,7 +5,6 @@
   <title>Algo bien</title>
   <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/7908766e-e60e-4a5b-8668-2bf967892094">
 
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
 
@@ -20,7 +19,6 @@
       measurementId: "G-1V6PKG2NNR"
     };
 
-    // Inicializa Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
   </script>
@@ -83,17 +81,14 @@
   <h1 id="titulo">Haz clic para un texto aleatorio</h1>
   <button onclick="mostrarTextoAleatorio()">Sorpresa</button>
 
-  <!-- Botón flotante -->
   <button id="toggleComentarios">💬 Ideas</button>
 
-  <!-- Caja de comentarios -->
   <div id="cajaComentarios">
     <textarea id="comentario" rows="4" placeholder="Escribe tu idea..."></textarea><br>
     <button onclick="enviarComentario()" style="margin-top: 8px;">Enviar</button>
     <ul id="listaComentarios" style="margin-top: 10px; padding-left: 20px;"></ul>
   </div>
 
-  <!-- Mostrar textos aleatorios -->
   <script>
     const textos = [
       "¡Hola, Negros!",
