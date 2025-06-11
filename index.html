@@ -28,21 +28,32 @@
   }
 
   function enviarComentario() {
-    const texto = document.getElementById("comentario").value;
-    if (texto.trim() === "") return alert("Escribe algo");
-
-    db.collection("comentarios").add({
-      mensaje: texto,
-      fecha: new Date()
-    })
-    .then(() => {
-      alert("Comentario enviado 😎");
-      document.getElementById("comentario").value = "";
-    })
-    .catch((error) => {
-      alert("Error al enviar: " + error);
-    });
+  const texto = document.getElementById("comentario").value;
+  if (texto.trim() === "") {
+    alert("Escribe algo primero.");
+    return;
   }
+
+  db.collection("comentarios").add({
+    mensaje: texto,
+    fecha: new Date()
+  })
+  .then(() => {
+    alert("✅ Comentario enviado correctamente");
+
+    // Mostrar en la lista
+    const li = document.createElement("li");
+    li.textContent = texto;
+    document.getElementById("listaComentarios").appendChild(li);
+
+    // Limpiar textarea
+    document.getElementById("comentario").value = "";
+  })
+  .catch((error) => {
+    alert("❌ Error al guardar el comentario: " + error.message);
+  });
+}
+
 </script>
 
    <style>
