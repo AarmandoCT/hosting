@@ -41,12 +41,10 @@
   .then(() => {
     alert("✅ Comentario enviado correctamente");
 
-    // Mostrar en la lista
     const li = document.createElement("li");
     li.textContent = texto;
     document.getElementById("listaComentarios").appendChild(li);
 
-    // Limpiar textarea
     document.getElementById("comentario").value = "";
   })
   .catch((error) => {
