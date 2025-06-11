@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Algo bien</title>
-  <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/7908766e-e60e-4a5b-8668-2bf967892094">
+  <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/7908766e-e60e-4a5b-8668-2bf967892094" />
 
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
-
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDda1QeqAj0B6I4alDG7WLNN-PWF0xrH9E",
       authDomain: "almacen-6278f.firebaseapp.com",
       projectId: "almacen-6278f",
-      storageBucket: "almacen-6278f.appspot.com",
+      storageBucket: "almacen-6278f.firebasestorage.app",
       messagingSenderId: "58793819823",
       appId: "1:58793819823:web:b30ebd040a4051258ede5a",
       measurementId: "G-1V6PKG2NNR"
@@ -49,6 +48,7 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
+      padding: 10px 20px;
       background-color: #333;
       color: white;
       border: none;
@@ -67,24 +67,19 @@
       padding: 15px;
       width: 250px;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       z-index: 1000;
-    }
-
-    textarea {
-      width: 100%;
     }
   </style>
 </head>
 <body>
-
   <h1 id="titulo">Haz clic para un texto aleatorio</h1>
   <button onclick="mostrarTextoAleatorio()">Sorpresa</button>
 
   <button id="toggleComentarios">💬 Ideas</button>
 
   <div id="cajaComentarios">
-    <textarea id="comentario" rows="4" placeholder="Escribe tu idea..."></textarea><br>
+    <textarea id="comentario" rows="4" placeholder="Escribe tu idea..." style="width: 100%;"></textarea><br>
     <button onclick="enviarComentario()" style="margin-top: 8px;">Enviar</button>
     <ul id="listaComentarios" style="margin-top: 10px; padding-left: 20px;"></ul>
   </div>
@@ -94,14 +89,14 @@
       "¡Hola, Negros!",
       "Nos toca josesin.",
       "Saquen el vicio.",
-      "El de atrás, ¿qué pedo?",
+      "El de atrás qué pedo?",
       "No quiero.",
-      "Si lees esto es porque un wey de 3ro tenía hueva y lo hizo.",
+      "Si lees esto es porque un wey de 3er grado tenía hueva y hizo esto.",
       "Duérmete.",
       "¿Hay pa' las de 1500?",
-      "¡YA CAYÓ LA BECA!",
+      "¡Ya cayó la beca!",
       "Eres wapo.",
-      "Hay 11 textos random, contando este. Espera más."
+      "Solo hay 11 textos, espera más actualizaciones."
     ];
 
     function mostrarTextoAleatorio() {
@@ -109,19 +104,15 @@
       document.getElementById("titulo").textContent = textos[indice];
     }
 
-    // Mostrar u ocultar la caja de comentarios
-    const boton = document.getElementById("toggleComentarios");
-    const caja = document.getElementById("cajaComentarios");
-
-    boton.onclick = () => {
-      caja.style.display = (caja.style.display === "none") ? "block" : "none";
+    document.getElementById("toggleComentarios").onclick = () => {
+      const caja = document.getElementById("cajaComentarios");
+      caja.style.display = caja.style.display === "none" ? "block" : "none";
     };
 
-    // Enviar comentario a Firestore
     function enviarComentario() {
-      const texto = document.getElementById("comentario").value;
-      if (texto.trim() === "") {
-        alert("✋ Escribe algo primero.");
+      const texto = document.getElementById("comentario").value.trim();
+      if (texto === "") {
+        alert("Escribe algo primero.");
         return;
       }
 
@@ -131,34 +122,17 @@
       })
       .then(() => {
         alert("✅ Comentario enviado correctamente");
+
         const li = document.createElement("li");
         li.textContent = texto;
         document.getElementById("listaComentarios").appendChild(li);
+
         document.getElementById("comentario").value = "";
       })
       .catch((error) => {
         alert("❌ Error al guardar el comentario: " + error.message);
       });
     }
-
-    // Cargar comentarios anteriores desde Firebase
-    window.onload = function () {
-      db.collection("comentarios")
-        .orderBy("fecha", "desc")
-        .limit(10)
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const li = document.createElement("li");
-            li.textContent = doc.data().mensaje;
-            document.getElementById("listaComentarios").appendChild(li);
-          });
-        })
-        .catch((error) => {
-          console.error("Error al cargar comentarios:", error);
-        });
-    };
   </script>
-
 </body>
 </html>
