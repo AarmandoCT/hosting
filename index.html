@@ -1,61 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-   <meta charset="UTF-8">
-   <title>Algo bien</title>
-   <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/7908766e-e60e-4a5b-8668-2bf967892094">
-   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDda1QeqAj0B6I4alDG7WLNN-PWF0xrH9E",
-    authDomain: "almacen-6278f.firebaseapp.com",
-    projectId: "almacen-6278f",
-    storageBucket: "almacen-6278f.firebasestorage.app",
-    messagingSenderId: "58793819823",
-    appId: "1:58793819823:web:b30ebd040a4051258ede5a",
-    measurementId: "G-1V6PKG2NNR"
-  };
+  <meta charset="UTF-8">
+  <title>Algo bien</title>
+  <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/7908766e-e60e-4a5b-8668-2bf967892094">
 
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
 
-</script>
-   <script>
-  function toggleForm() {
-    const form = document.getElementById('formulario');
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
-  }
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDda1QeqAj0B6I4alDG7WLNN-PWF0xrH9E",
+      authDomain: "almacen-6278f.firebaseapp.com",
+      projectId: "almacen-6278f",
+      storageBucket: "almacen-6278f.appspot.com",
+      messagingSenderId: "58793819823",
+      appId: "1:58793819823:web:b30ebd040a4051258ede5a",
+      measurementId: "G-1V6PKG2NNR"
+    };
 
-  function enviarComentario() {
-  const texto = document.getElementById("comentario").value;
-  if (texto.trim() === "") {
-    alert("Escribe algo primero.");
-    return;
-  }
+    // Inicializa Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
 
-  db.collection("comentarios").add({
-    mensaje: texto,
-    fecha: new Date()
-  })
-  .then(() => {
-    alert("✅ Comentario enviado correctamente");
-
-    const li = document.createElement("li");
-    li.textContent = texto;
-    document.getElementById("listaComentarios").appendChild(li);
-
-    document.getElementById("comentario").value = "";
-  })
-  .catch((error) => {
-    alert("❌ Error al guardar el comentario: " + error.message);
-  });
-}
-
-</script>
-
-   <style>
-    
+  <style>
     body {
       margin: 0;
       height: 100vh;
@@ -72,89 +42,128 @@
       margin-bottom: 20px;
     }
 
-     button {
-       padding: 10px 20px;
-       font-size: 16px;
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
     }
-   </style>
+
+    #toggleComentarios {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #cajaComentarios {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 15px;
+      width: 250px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    textarea {
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-   <h1 id="titulo">Haz clic para un texto aleatorio</h1>
+
+  <h1 id="titulo">Haz clic para un texto aleatorio</h1>
   <button onclick="mostrarTextoAleatorio()">Sorpresa</button>
-   
-   <script>
+
+  <!-- Botón flotante -->
+  <button id="toggleComentarios">💬 Ideas</button>
+
+  <!-- Caja de comentarios -->
+  <div id="cajaComentarios">
+    <textarea id="comentario" rows="4" placeholder="Escribe tu idea..."></textarea><br>
+    <button onclick="enviarComentario()" style="margin-top: 8px;">Enviar</button>
+    <ul id="listaComentarios" style="margin-top: 10px; padding-left: 20px;"></ul>
+  </div>
+
+  <!-- Mostrar textos aleatorios -->
+  <script>
     const textos = [
       "¡Hola, Negros!",
       "Nos toca josesin.",
-      "Saquen las el vicio.",
-      "El de atras que pedo?.",
+      "Saquen el vicio.",
+      "El de atrás, ¿qué pedo?",
       "No quiero.",
-      "Si lees esto es por que un wey de 3ser grado tenia hueva y hizo esto, pa que veas.",
-      "Duermete.",
-      "hay pa las de 1500?.",
-      "YA CALLO LA BECA!!!!!.",
-      "Eres Wapo.",
-      "Nomas hay 11 textos randoms, contando este, espera actualizaciones."
+      "Si lees esto es porque un wey de 3ro tenía hueva y lo hizo.",
+      "Duérmete.",
+      "¿Hay pa' las de 1500?",
+      "¡YA CAYÓ LA BECA!",
+      "Eres wapo.",
+      "Hay 11 textos random, contando este. Espera más."
     ];
 
     function mostrarTextoAleatorio() {
       const indice = Math.floor(Math.random() * textos.length);
       document.getElementById("titulo").textContent = textos[indice];
     }
-   </script>
 
-   <button id="toggleComentarios" style="
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  z-index: 1000;
-">
-  💬 Ideas
-</button>
-  
-<div id="cajaComentarios" style="
-  display: none;
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 15px;
-  width: 250px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 1000;
-">
-   
-  <textarea id="comentario" rows="4" placeholder="Escribe tu idea..." style="width: 100%;"></textarea><br>
-  <button onclick="agregarComentario()" style="margin-top: 8px;">Enviar</button>
-  <ul id="listaComentarios" style="margin-top: 10px; padding-left: 20px;"></ul>
-</div>
+    // Mostrar u ocultar la caja de comentarios
+    const boton = document.getElementById("toggleComentarios");
+    const caja = document.getElementById("cajaComentarios");
 
-<script>
-  const boton = document.getElementById("toggleComentarios");
-  const caja = document.getElementById("cajaComentarios");
+    boton.onclick = () => {
+      caja.style.display = (caja.style.display === "none") ? "block" : "none";
+    };
 
-  boton.onclick = () => {
-    caja.style.display = (caja.style.display === "none") ? "block" : "none";
-  };
+    // Enviar comentario a Firestore
+    function enviarComentario() {
+      const texto = document.getElementById("comentario").value;
+      if (texto.trim() === "") {
+        alert("✋ Escribe algo primero.");
+        return;
+      }
 
-  function agregarComentario() {
-    const texto = document.getElementById("comentario").value;
-    if (texto.trim() !== "") {
-      const li = document.createElement("li");
-      li.textContent = texto;
-      document.getElementById("listaComentarios").appendChild(li);
-      document.getElementById("comentario").value = "";
+      db.collection("comentarios").add({
+        mensaje: texto,
+        fecha: new Date()
+      })
+      .then(() => {
+        alert("✅ Comentario enviado correctamente");
+        const li = document.createElement("li");
+        li.textContent = texto;
+        document.getElementById("listaComentarios").appendChild(li);
+        document.getElementById("comentario").value = "";
+      })
+      .catch((error) => {
+        alert("❌ Error al guardar el comentario: " + error.message);
+      });
     }
-  }
-</script>
+
+    // Cargar comentarios anteriores desde Firebase
+    window.onload = function () {
+      db.collection("comentarios")
+        .orderBy("fecha", "desc")
+        .limit(10)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const li = document.createElement("li");
+            li.textContent = doc.data().mensaje;
+            document.getElementById("listaComentarios").appendChild(li);
+          });
+        })
+        .catch((error) => {
+          console.error("Error al cargar comentarios:", error);
+        });
+    };
+  </script>
 
 </body>
 </html>
