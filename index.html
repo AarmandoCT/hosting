@@ -5,62 +5,60 @@
   <title>Algo bien</title>
   <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/7908766e-e60e-4a5b-8668-2bf967892094" />
 
- <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-                                                                      
-  const firebaseConfig = {
-    apiKey: "AIzaSyDda1QeqAj0B6I4alDG7WLNN-PWF0xrH9E",
-    authDomain: "almacen-6278f.firebaseapp.com",
-    projectId: "almacen-6278f",
-    storageBucket: "almacen-6278f.firebasestorage.app",
-    messagingSenderId: "58793819823",
-    appId: "1:58793819823:web:b30ebd040a4051258ede5a",
-    measurementId: "G-1V6PKG2NNR"
-  };
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyDda1QeqAj0B6I4alDG7WLNN-PWF0xrH9E",
+      authDomain: "almacen-6278f.firebaseapp.com",
+      projectId: "almacen-6278f",
+      storageBucket: "almacen-6278f.firebasestorage.app",
+      messagingSenderId: "58793819823",
+      appId: "1:58793819823:web:b30ebd040a4051258ede5a",
+      measurementId: "G-1V6PKG2NNR"
+    };
 
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
     let ultimaVez = 0;
 
- window.enviarComentario = async function () {
-    const texto = document.getElementById("comentario").value.trim();
-    if (ahora - ultimaVez < 180000) {
-      alert("🕒 Espera 3 minutos antes de enviar otro comentario.");
-      return;
+    window.enviarComentario = async function () {
+      const texto = document.getElementById("comentario").value.trim();
+      const ahora = Date.now();
+
+      if (ahora - ultimaVez < 180000) {
+        alert("🕒 Espera 3 minutos antes de enviar otro comentario.");
+        return;
+      }
+
+      if (texto === "") {
+        alert("Escribe algo primero.");
+        return;
+      }
+
+      if (texto.length > 35) {
+        alert("🛑 Máximo 35 caracteres.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "comentarios"), {
+          mensaje: texto,
+          fecha: new Date()
+        });
+
+        alert("✅ Comentario enviado correctamente");
+        const li = document.createElement("li");
+        li.textContent = texto;
+        document.getElementById("listaComentarios").appendChild(li);
+        document.getElementById("comentario").value = "";
+        ultimaVez = ahora;
+      } catch (error) {
+        alert("❌ Error al guardar el comentario: " + error.message);
+      }
     }
-
-    const texto = document.getElementById("comentario").value;
-    if (texto.trim() === "") {
-      alert("Escribe algo primero.");
-      return;
-    }
-    
-    if (texto.length > 35) {
-      alert("🛑 Máximo 35 caracteres.");
-      return;
-    }
-
-    db.collection("comentarios").add({
-      mensaje: texto,
-      fecha: new Date()
-    })
-    .then(() => {
-      alert("✅ Comentario enviado correctamente");
-
-      const li = document.createElement("li");
-      li.textContent = texto;
-      document.getElementById("listaComentarios").appendChild(li);
-      document.getElementById("comentario").value = "";
-
-      ultimaVez = ahora;
-    })
-    .catch((error) => {
-      alert("❌ Error al guardar el comentario: " + error.message);
-    });
-  }
-</script>
+  </script>
 
   <style>
     body {
@@ -88,7 +86,6 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      padding: 10px 20px;
       background-color: #333;
       color: white;
       border: none;
@@ -110,16 +107,7 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       z-index: 1000;
     }
-    
-  </style>
-  
-  <style>
 
-     boton {
-       padding: 10px 20px;
-       font-size: 16px;
-     }
-    
     .contador-caja {
       display: inline-block;
       background: white;
@@ -138,12 +126,12 @@
       padding: 15px;
       width: 250px;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     #boton {
-      writing-mode: vertical-tb ;
-      padding: 16px 16px;
+      writing-mode: vertical-tb;
+      padding: 16px;
       font-size: 16px;
       background-color: #2e86de;
       color: white;
@@ -155,7 +143,6 @@
     #boton:hover {
       background-color: #1e6ec6;
     }
-    
   </style>
 </head>
 <body>
@@ -169,10 +156,10 @@
     <button onclick="enviarComentario()" style="margin-top: 8px;">Enviar</button>
     <ul id="listaComentarios" style="margin-top: 10px; padding-left: 20px;"></ul>
   </div>
-  
-  <div id="contador-caja">
+
+  <div class="contador-caja">
     <div id="contador">0</div>
-    <button id="boton" onclick="sumarPunto()" style="margin-top: 10px; padding-right: 8px;">Agregar punto</button>
+    <button id="boton" onclick="sumarPunto()" style="margin-top: 10px;">Agregar punto</button>
   </div>
 
   <script>
@@ -180,10 +167,12 @@
 
     function sumarPunto() {
       puntos++;
-      document.getElementById("contador").textContent = puntos;
+      const contador = document.getElementById("contador");
+      contador.style.display = "block";
+      contador.textContent = puntos;
     }
   </script>
-  
+
   <script>
     const textos = [
       "¡Hola, Negros!",
@@ -207,7 +196,7 @@
     document.getElementById("toggleComentarios").onclick = () => {
       const caja = document.getElementById("cajaComentarios");
       caja.style.display = caja.style.display === "none" ? "block" : "none";
-      };
+    };
   </script>
 </body>
 </html>
