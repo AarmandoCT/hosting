@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -20,7 +21,56 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
- </script>
+
+    let ultimaVez = 0;
+
+ window.enviarComentario = async function () {
+    const texto = document.getElementById("comentario").value.trim();
+    if (ahora - ultimaVez < 180000) {
+      alert("🕒 Espera 3 minutos antes de enviar otro comentario.");
+      return;
+    }
+
+    const texto = document.getElementById("comentario").value;
+    if (texto.trim() === "") {
+      alert("Escribe algo primero.");
+      return;
+    }
+    
+    if (texto.length > 35) {
+      alert("🛑 Máximo 35 caracteres.");
+      return;
+    }
+
+    db.collection("comentarios").add({
+      mensaje: texto,
+      fecha: new Date()
+    })
+    .then(() => {
+      alert("✅ Comentario enviado correctamente");
+
+      const li = document.createElement("li");
+      li.textContent = texto;
+      document.getElementById("listaComentarios").appendChild(li);
+      document.getElementById("comentario").value = "";
+
+      ultimaVez = ahora;
+    })
+    .catch((error) => {
+      alert("❌ Error al guardar el comentario: " + error.message);
+    });
+  }
+</script>
+</body>
+</html>
+    .catch((error) => {
+      alert("❌ Error al guardar el comentario: " + error.message);
+    });
+  }
+</script>
+  };
+</script>
+
 
   <style>
     body {
@@ -109,46 +159,5 @@
       caja.style.display = caja.style.display === "none" ? "block" : "none";
       };
   </script>
-  
- <script>
-  let ultimaVez = 0;
-
-  function enviarComentario() {
-    const ahora = Date.now();
-    if (ahora - ultimaVez < 180000) {
-      alert("🕒 Espera 3 minutos antes de enviar otro comentario.");
-      return;
-    }
-
-    const texto = document.getElementById("comentario").value;
-    if (texto.trim() === "") {
-      alert("Escribe algo primero.");
-      return;
-    }
-    
-    if (texto.length > 35) {
-      alert("🛑 Máximo 35 caracteres.");
-      return;
-    }
-
-    db.collection("comentarios").add({
-      mensaje: texto,
-      fecha: new Date()
-    })
-    .then(() => {
-      alert("✅ Comentario enviado correctamente");
-
-      const li = document.createElement("li");
-      li.textContent = texto;
-      document.getElementById("listaComentarios").appendChild(li);
-      document.getElementById("comentario").value = "";
-
-      ultimaVez = ahora;
-    })
-    .catch((error) => {
-      alert("❌ Error al guardar el comentario: " + error.message);
-    });
-  }
-</script>
 </body>
 </html>
