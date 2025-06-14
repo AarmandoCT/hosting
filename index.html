@@ -20,33 +20,7 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-
-  window.enviarComentario = async function () {
-    const texto = document.getElementById("comentario").value.trim();
-    if (texto === "") {
-      alert("Escribe algo primero.");
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, "comentarios"), {
-        mensaje: texto,
-        fecha: new Date()
-      });
-
-      alert("✅ Comentario enviado correctamente");
-
-      const li = document.createElement("li");
-      li.textContent = texto;
-      document.getElementById("listaComentarios").appendChild(li);
-      document.getElementById("comentario").value = "";
-    } catch (error) {
-      alert("❌ Error al guardar el comentario: " + error.message);
-      console.error(error);
-    }
-  };
-</script>
-
+ </script>
 
   <style>
     body {
