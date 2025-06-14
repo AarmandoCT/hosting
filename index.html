@@ -110,16 +110,22 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       z-index: 1000;
     }
+    
+  </style>
+  
+  <style>
 
-    #contador-caja {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 10px 20px;
-      background-color; #235;
-      color: red;
-      border: none;
-      border-radius: 32px;
+     boton {
+       padding: 10px 20px;
+       font-size: 16px;
+     }
+    
+    .contador-caja {
+      display: inline-block;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
 
     #contador {
@@ -135,7 +141,7 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);;
     }
 
-    #boton2 {
+    #boton {
       writing-mode: vertical-tb ;
       padding: 20px 20px;
       font-size: 20px;
@@ -146,7 +152,7 @@
       cursor: pointer;
     }
 
-    #boton2:hover {
+    #boton:hover {
       background-color: #1e6ec6;
     }
     
@@ -165,7 +171,7 @@
   </div>
   <div id="contador-caja">
     <div id="contador">0</div>
-    <button id="boton2" onclick="sumarPunto()">Agregar punto</button>
+    <boton id="boton" onclick="sumarPunto()">Agregar punto</boton>
   </div>
 
   <script>
