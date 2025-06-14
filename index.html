@@ -134,32 +134,40 @@
     document.getElementById("toggleComentarios").onclick = () => {
       const caja = document.getElementById("cajaComentarios");
       caja.style.display = caja.style.display === "none" ? "block" : "none";
-    };
-
-    function enviarComentario() {
-      const texto = document.getElementById("comentario").value.trim();
-      if (texto === "") {
-        alert("Escribe algo primero.");
-        return;
-      }
-
-      db.collection("comentarios").add({
-        mensaje: texto,
-        fecha: new Date()
-      })
-      .then(() => {
-        alert("✅ Comentario enviado correctamente");
-
-        const li = document.createElement("li");
-        li.textContent = texto;
-        document.getElementById("listaComentarios").appendChild(li);
-
-        document.getElementById("comentario").value = "";
-      })
-      .catch((error) => {
-        alert("❌ Error al guardar el comentario: " + error.message);
-      });
-    }
+      };
   </script>
+  
+  <script>
+    function enviarComentario() {
+    const ahora = Date.now();
+    if (ahora - ultimaVez < 10000) { // 10 segundos
+      alert("🕒 Espera un poco antes de enviar otro comentario.");
+      return;
+    }
+      const texto = document.getElementById("comentario").value;
+    if (texto.trim() === "") {
+      alert("Escribe algo primero.");
+      return;
+    }
+
+    db.collection("comentarios").add({
+      mensaje: texto,
+      fecha: new Date()
+    })
+    .then(() => {
+      alert("✅ Comentario enviado correctamente");
+
+      const li = document.createElement("li");
+      li.textContent = texto;
+      document.getElementById("listaComentarios").appendChild(li);
+      document.getElementById("comentario").value = "";
+
+      ultimaVez = ahora; // Actualiza el tiempo del último envío
+    })
+    .catch((error) => {
+      alert("❌ Error al guardar el comentario: " + error.message);
+    });
+  }
+</script>
 </body>
 </html>
