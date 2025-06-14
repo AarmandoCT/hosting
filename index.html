@@ -1,4 +1,10 @@
-<script type="module">
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Algo bien</title>
+  <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/7908766e-e60e-4a5b-8668-2bf967892094" />
+
+ <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -14,33 +20,122 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+ </script>
 
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+      background-color: #eef2f7;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    #toggleComentarios {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    #cajaComentarios {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 15px;
+      width: 250px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="titulo">Haz clic para un texto aleatorio</h1>
+  <button onclick="mostrarTextoAleatorio()">Sorpresa</button>
+
+  <button id="toggleComentarios">💬 Ideas</button>
+
+  <div id="cajaComentarios">
+    <textarea id="comentario" rows="4" placeholder="Escribe tu idea..." style="width: 100%;"></textarea><br>
+    <button onclick="enviarComentario()" style="margin-top: 8px;">Enviar</button>
+    <ul id="listaComentarios" style="margin-top: 10px; padding-left: 20px;"></ul>
+  </div>
+
+  <script>
+    const textos = [
+      "¡Hola, Negros!",
+      "Nos toca josesin.",
+      "Saquen el vicio.",
+      "El de atrás qué pedo?",
+      "No quiero.",
+      "Si lees esto es porque un wey de 3er grado tenía hueva y hizo esto.",
+      "Duérmete.",
+      "¿Hay pa' las de 1500?",
+      "¡Ya cayó la beca!",
+      "Eres wapo.",
+      "Solo hay 11 textos, espera más actualizaciones."
+    ];
+
+    function mostrarTextoAleatorio() {
+      const indice = Math.floor(Math.random() * textos.length);
+      document.getElementById("titulo").textContent = textos[indice];
+    }
+
+    document.getElementById("toggleComentarios").onclick = () => {
+      const caja = document.getElementById("cajaComentarios");
+      caja.style.display = caja.style.display === "none" ? "block" : "none";
+      };
+  </script>
+  
+ <script>
   let ultimaVez = 0;
 
-  window.enviarComentario = async function () {
+  function enviarComentario() {
     const ahora = Date.now();
     if (ahora - ultimaVez < 180000) {
       alert("🕒 Espera 3 minutos antes de enviar otro comentario.");
       return;
     }
 
-    const texto = document.getElementById("comentario").value.trim();
-    if (texto === "") {
+    const texto = document.getElementById("comentario").value;
+    if (texto.trim() === "") {
       alert("Escribe algo primero.");
       return;
     }
-
+    
     if (texto.length > 35) {
       alert("🛑 Máximo 35 caracteres.");
       return;
     }
 
-    try {
-      await addDoc(collection(db, "comentarios"), {
-        mensaje: texto,
-        fecha: new Date()
-      });
-
+    db.collection("comentarios").add({
+      mensaje: texto,
+      fecha: new Date()
+    })
+    .then(() => {
       alert("✅ Comentario enviado correctamente");
 
       const li = document.createElement("li");
@@ -49,9 +144,11 @@
       document.getElementById("comentario").value = "";
 
       ultimaVez = ahora;
-    } catch (error) {
+    })
+    .catch((error) => {
       alert("❌ Error al guardar el comentario: " + error.message);
-      console.error(error);
-    }
-  };
+    });
+  }
 </script>
+</body>
+</html>
