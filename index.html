@@ -137,25 +137,24 @@
       };
   </script>
   
-  <script>
-    function enviarComentario() {
+ <script>
+  let ultimaVez = 0;
+
+  function enviarComentario() {
     const ahora = Date.now();
-    if (ahora - ultimaVez < 10000) { // 10 segundos
-      alert("🕒 Espera un poco antes de enviar otro comentario.");
+    if (ahora - ultimaVez < 180000) {
+      alert("🕒 Espera 3 minutos antes de enviar otro comentario.");
       return;
     }
-      const texto = document.getElementById("comentario").value;
-    if (texto.trim() === "") {
-      alert("Escribe algo primero.");
-      return;
-    } 
-      const texto = document.getElementById("comentario").value;
+
+    const texto = document.getElementById("comentario").value;
     if (texto.trim() === "") {
       alert("Escribe algo primero.");
       return;
     }
-    if (texto.length > 200) {
-      alert("🛑 Máximo 200 caracteres.");
+    
+    if (texto.length > 35) {
+      alert("🛑 Máximo 35 caracteres.");
       return;
     }
 
@@ -171,7 +170,7 @@
       document.getElementById("listaComentarios").appendChild(li);
       document.getElementById("comentario").value = "";
 
-      ultimaVez = ahora; // Actualiza el tiempo del último envío
+      ultimaVez = ahora;
     })
     .catch((error) => {
       alert("❌ Error al guardar el comentario: " + error.message);
