@@ -148,6 +148,15 @@
     if (texto.trim() === "") {
       alert("Escribe algo primero.");
       return;
+    } 
+      const texto = document.getElementById("comentario").value;
+    if (texto.trim() === "") {
+      alert("Escribe algo primero.");
+      return;
+    }
+    if (texto.length > 200) {
+      alert("🛑 Máximo 200 caracteres.");
+      return;
     }
 
     db.collection("comentarios").add({
