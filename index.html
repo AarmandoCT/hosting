@@ -173,6 +173,7 @@
 
     function sumarPunto() {
       puntos++;
+      document.getElementById("contador").textContent = numero;
       const contador = document.getElementById("contador");
       contador.style.display = "block";
       contador.textContent = puntos;
