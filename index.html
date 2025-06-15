@@ -178,7 +178,14 @@
       contador.textContent = puntos;
     }
   </script>
-
+  
+  <script>
+  let numero = 0;
+    setInterval(() => {
+      document.getElementById("contador").textContent = numero;
+    }, 1000); // actualiza cada segundo
+  </script>
+  
   <script>
     const textos = [
       "¡Hola, Negros!",
